@@ -61,3 +61,14 @@ def GMM_cluster(p, n_comp=2, init_params="random", n_init=1, **kwargs):
     model = GaussianMixture(n_components=n_comp, init_params=init_params, n_init=n_init, **kwargs)
     labels = model.fit(p).predict(p)
     return labels
+
+def averaging_cluster(g, times= 3, embeding= LSE):
+    """calcuating the average clustering for several time of EM algorishm for different initialization.
+    the function will return an array of averaging result from EM algorishm at different initializaion"""
+    p= embeding(g)
+    labels1=[]
+    for i in range(times):
+        labels= np.reshape(cluster_member(GMM_cluster(p.T)),(1,-1)).flatten()
+        labels1.append(labels)
+    return sum(labels1)/times
+
