@@ -18,7 +18,7 @@ def ASE(g, dims=2, dim_offset=0):
 def LSE(g, dims=2, eigval_tolerance=1e-10, dim_offset=0):
     """
     Embed undirected graph `g` using Laplacian Spectal Embedding.
-    Returns a dims x n numpy array, where n is the number of nodes.
+    Returns a `dims` x `n` numpy array, where `n` is the number of nodes.
     This uses the Laplacian Eigenmaps algorithm:
     https://web.cse.ohio-state.edu/~belkin.8/papers/LEM_NC_03.pdf
 
@@ -50,14 +50,14 @@ def LSE(g, dims=2, eigval_tolerance=1e-10, dim_offset=0):
 
 def cluster_member(vector):
     """Return the co-clustering matrix C of a cluster label vector.
-    If vector[i] is the label of node i, then C[i,j] is 1 if vector[i] == vector[j]
-    and 0 otherwise."""
+    If `vector[i]` is the label of node `i`, then `C[i,j]` is 1 if
+    `vector[i] == vector[j]` and 0 otherwise."""
     return np.array([a == vector for a in vector], dtype=int)
 
 
-def GMM_cluster(p, dims=2, init_params="random", n_init=1, **kwargs):
+def GMM_cluster(p, n_comp=2, init_params="random", n_init=1, **kwargs):
     """Apply Gaussian Mixture Model clustering to data p and return the predicted labels.
     Note that the output of `ASE` and `LSE` will need to be transposed to work properly."""
-    model = GaussianMixture(n_components=dims, init_params=init_params, n_init=n_init, **kwargs)
+    model = GaussianMixture(n_components=n_comp, init_params=init_params, n_init=n_init, **kwargs)
     labels = model.fit(p).predict(p)
     return labels
