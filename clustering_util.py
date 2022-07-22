@@ -68,7 +68,7 @@ def averaging_cluster(g, times= 3, embeding= LSE):
     p= embeding(g)
     labels1=[]
     for i in range(times):
-        labels= np.reshape(cluster_member(GMM_cluster(p.T)),(1,-1)).flatten()
+        labels= cluster_member(GMM_cluster(p.T))
         labels1.append(labels)
     return sum(labels1)/times
 
