@@ -62,13 +62,35 @@ def GMM_cluster(p, n_comp=2, init_params="random", n_init=1, **kwargs):
     labels = model.fit(p).predict(p)
     return labels
 
-def averaging_cluster(g, times= 3, embeding= LSE):
+def averaging_cluster(g, times= 3, embeding= LSE, return_labels=None, coclusters=None):
     """calcuating the average clustering for several time of EM algorishm for different initialization.
     the function will return an array of averaging result from EM algorishm at different initializaion"""
     p= embeding(g)
-    labels1=[]
+    cocluster = []
+    all_labels = []
     for i in range(times):
-        labels= cluster_member(GMM_cluster(p.T))
-        labels1.append(labels)
-    return sum(labels1)/times
+        labels = GMM_cluster(p.T)
+        C_trial = cluster_member(labels)
+        cocluster.append(C_trial)
+        all_labels.append(labels)
+        if coclusters is not None:
+            coclusters[i,:,:] = labels
+    if return_labels is not None:
+        return_labels[:,:] = np.array(all_labels)
+    return sum(cocluster)/times
 
+def coclustering_trials(g, n_trials, embedding=LSE):
+    """Run GMM clsutering on g for n_trials, and return
+    the array of labels (which will be n_trials x n_nodes)
+    the array of coclusterings (which will be n_trials x n_nodes x n_nodes
+    """
+    p = embedding(g)
+    k_all = [GMM_cluster(p.T) for _ in range(n_trials)]
+    C_all = [cluster_member(k) for k in k_all]
+    return np.array(k_all), np.array(C_all)
+
+
+def quality_score(h):
+    """Given a histogram h, compute its "quality score", meaning..."""
+    s = 0
+    return s
