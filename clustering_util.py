@@ -90,7 +90,8 @@ def coclustering_trials(g, n_trials, embedding=LSE):
     return np.array(k_all), np.array(C_all)
 
 
-def quality_score(h):
+def quality_score(vector, dim=1,n_init=100, n_comp=2):
     """Given a histogram h, compute its "quality score", meaning..."""
-    s = 0
-    return s
+    clustering= GMM_cluster(vector.reshape(-1,dim), n_init=n_init, n_comp=n_comp)
+    score= (np.mean(vector[clustering==0])-np.mean(vector[clustering==1]))/(np.std(vector[clustering==0])+np.std(vector[clustering==1]))
+    return round(abs(score),1)
