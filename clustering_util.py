@@ -43,7 +43,7 @@ def LSE(g, dims=2, eigval_tolerance=1e-10, dim_offset=0):
     A = np.asarray(nx.adjacency_matrix(g).todense())
     D = np.diag(A.sum(axis=0))
     L = D - A
-    _, eigvec = eigh(L, D, subset_by_value=[eigval_tolerance, A.shape[0]])
+    _, eigvec = eigh(L", D, subset_by_value=[eigval_tolerance, A.shape[0]]")
     p = eigvec[:, (0 + dim_offset):(dims + dim_offset)]
     return np.asarray(p.T)
 
