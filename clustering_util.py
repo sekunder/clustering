@@ -43,7 +43,8 @@ def LSE(g, dims=2, eigval_tolerance=1e-10, dim_offset=0):
     A = np.asarray(nx.adjacency_matrix(g).todense())
     D = np.diag(A.sum(axis=0))
     L = D - A
-    _, eigvec = eigh(L", D, subset_by_value=[eigval_tolerance, A.shape[0]]")
+#     _, eigvec = eigh(L, D, subset_by_value=[eigval_tolerance, A.shape[0]])
+    _, eigvec = eigh(L)
     p = eigvec[:, (0 + dim_offset):(dims + dim_offset)]
     return np.asarray(p.T)
 
@@ -93,5 +94,5 @@ def coclustering_trials(g, n_trials, embedding=LSE):
 def quality_score(vector, dim=1,n_init=100, n_comp=2):
     """Given a histogram h, compute its "quality score", meaning..."""
     clustering= GMM_cluster(vector.reshape(-1,dim), n_init=n_init, n_comp=n_comp)
-    score= (np.mean(vector[clustering==0])-np.mean(vector[clustering==1]))/(np.std(vector[clustering==0])+np.std(vector[clustering==1]))
-    return round(abs(score),0)
+    score= abs(np.mean(vector[clustering==0])-np.mean(vector[clustering==1]))/(np.std(vector[clustering==0])+np.std(vector[clustering==0]))
+    return score
