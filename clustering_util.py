@@ -93,7 +93,12 @@ def coclustering_trials(g, n_trials, embedding=LSE):
 
 def quality_score(vector, dim=1,n_init=100, n_comp=2):
     """Given a histogram h, compute its "quality score", meaning..."""
-    clustering = GMM_cluster(vector.reshape(-1,dim), n_init=n_init, n_comp=n_comp)
-    # todo: get the parameters straight from the model, instead of taking means
-    score = abs(np.mean(vector[clustering==0]) - np.mean(vector[clustering==1])) / (1 + np.std(vector[clustering==0]) + np.std(vector[clustering==0]))
+    model= GaussianMixture(n_components=n_comp, init_params='random',n_init= n_init)
+    model.fit(vector.reshape(-1,dim))
+    score= abs(model.means_[0]-model.means_[1])/abs(1+model.covariances_[0]-model.covariances_[1])
+    
     return score
+
+def best_friend(vector,rate= 0.9):
+    best_friend=np.where(vector>=rate)
+    return best_friend
