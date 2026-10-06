@@ -1,2 +1,2 @@
 # clustering
-Summer project exploring notions of partial cluster membership
+exploring notions of partial cluster membership
